@@ -53,4 +53,39 @@ router.get("/", function (req, res) {
     .catch((err) => console.log(err));
 });
 
+/*GET ONE PRODUCT*/
+router.get("/:prodId", (req, res) => {
+  let productId = req.params.prodId;
+  //console.log(productId);
+  database
+    .table("products as p")
+    .join([
+      {
+        table: "categories as c",
+        on: `c.id = p.cat_id`,
+      },
+    ])
+    .withFields([
+      "c.title as category",
+      "p.title as name",
+      "p.price",
+      "p.quantity",
+      "p.description",
+      "p.image",
+      "p.id",
+      "p.images",
+    ])
+    .filter({ "p.id": productId }) //'p.id' that alies always use single cote
+    .get()
+    .then((prod) => {
+      console.log(prod);
+      if (prod) {
+        res.status(200).json(prod);
+      } else {
+        res.json({ message: `No product found with the id ${productId}` });
+      }
+    })
+    .catch((err) => res.json(err));
+});
+
 module.exports = router;
