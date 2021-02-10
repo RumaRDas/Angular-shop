@@ -3,16 +3,14 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 //import Routes
-const producstRoute = require("./routes/products");
-const usersRoute = require("./routes/users");
-
-//use Route
-app.use("/api/products", producstRoute);
-app.use("/api/users", usersRoute);
+const usersRouter = require("./routes/users");
+const productsRouter = require("./routes/products");
 
 const app = express();
+
 app.use(
   cors({
     origin: "*",
@@ -32,11 +30,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
-
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
@@ -47,5 +40,9 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+//use Route
+app.use("/api/products", productsRouter);
+app.use("/api/users", usersRouter);
 
 module.exports = app;
