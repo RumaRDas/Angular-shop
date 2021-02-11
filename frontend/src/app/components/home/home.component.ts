@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  products: any[] = [];
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.productService.showMessage();
+    this.productService
+      .getAllProducts()
+      .subscribe((prods: { count: Number; products: any[] }) => {
+        this.products = prods.products;
+        console.log(this.products);
+      });
   }
 }
