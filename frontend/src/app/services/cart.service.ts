@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
+//always use cartDataServer instade of cartClientServer cause haker can change localstorage
 @Injectable({
   providedIn: 'root',
 })
@@ -87,5 +88,32 @@ export class CartService {
           });
       });
     }
+  }
+  //(quantity?: number )  means may set or not
+  AddProductToCart(id: number, quantity?: number) {
+    this.productService.getSingleProduct(id).subscribe((prod) => {
+      // 1. If the cart is empty
+      if (this.cartDataServer.data[0].product === undefined) {
+        this.cartDataServer.data[0].product = prod;
+        this.cartDataServer.data[0].numInCart =
+          quantity !== undefined ? quantity : 1;
+        //TODO
+        /**Create Calculator Function and replace it here */
+        this.cartDataClient.prodData[0].incart = this.cartDataServer.data[0].numInCart;
+        this.cartDataClient.prodData[0].id = prod.id;
+        this.cartDataClient.total = this.cartDataServer.total;
+        //Update localstorage
+        localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
+        this.cartData$.next({ ...this.cartDataServer });
+        //DiSplay a toast Notifications
+      }
+      // END of IF
+      // Cart is not empty
+      else {
+      }
+    });
+    // 2. if the cart has some items
+    // 3. a) if that item is already in the cart
+    // 3. a) if that item is not in the cart
   }
 }
