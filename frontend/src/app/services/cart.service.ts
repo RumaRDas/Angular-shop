@@ -1,3 +1,4 @@
+import { ProductModelServer } from './../models/product.model';
 import { Router } from '@angular/router';
 import { CartModelServer, CartModelPublic } from './../models/cart.model';
 import { OrderService } from './order.service';
@@ -57,6 +58,34 @@ export class CartService {
     if (info !== null && info !== undefined && info.prodData[0].incart !== 0) {
       // that means local Storage is not empty and has some information
       this.cartDataClient = info;
+      // Loop through each entry and put it in the cartDataServer object
+      this.cartDataClient.prodData.forEach((p) => {
+        this.productService
+          .getSingleProduct(p.id)
+          .subscribe((actualProductInfo: ProductModelServer) => {
+            if (this.cartDataServer.data[0].numInCart === 0) {
+              this.cartDataServer.data[0].numInCart = p.incart;
+              this.cartDataServer.data[0].product = actualProductInfo;
+
+              // TODO
+              /**Create Calculator Function and replace it here */
+              this.cartDataClient.total = this.cartDataServer.total;
+              localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
+            } else {
+              //CART data server already has some entry in it
+              this.cartDataServer.data.push({
+                numInCart: p.incart,
+                product: actualProductInfo,
+              });
+              // TODO
+              /**Create Calculator Function and replace it here */
+              //UPDATE LOCAL STORAGE
+              this.cartDataClient.total = this.cartDataServer.total;
+              localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
+            }
+            this.cartData$.next({ ...this.cartDataServer });
+          });
+      });
     }
   }
 }
