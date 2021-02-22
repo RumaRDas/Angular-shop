@@ -1,3 +1,4 @@
+import { CartService } from './../../services/cart.service';
 import { Router } from '@angular/router';
 import { ProductService } from './../../services/product.service';
 import { Component, OnInit } from '@angular/core';
@@ -10,7 +11,11 @@ import { ProductModelServer, serverResponse } from '../../models/product.model';
 })
 export class HomeComponent implements OnInit {
   products: ProductModelServer[] = [];
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.productService.getAllProducts().subscribe((prods: serverResponse) => {
@@ -20,5 +25,8 @@ export class HomeComponent implements OnInit {
   }
   selectProduct(id: Number) {
     this.router.navigate(['/product', id]).then(); //take on that page
+  }
+  AddToCart(id: number) {
+    this.cartService.AddProductToCart(id);
   }
 }
