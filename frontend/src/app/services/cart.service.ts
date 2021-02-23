@@ -95,6 +95,13 @@ export class CartService {
       });
     }
   } //
+
+  CalculateSubTotal(index): number {
+    let subTotal = 0;
+    const p = this.cartDataServer.data[index];
+    subTotal = p.product.price * p.numInCart;
+    return subTotal;
+  }
   //(quantity?: number )  means may set or not
   AddProductToCart(id: number, quantity?: number) {
     this.productService.getSingleProduct(id).subscribe((prod) => {
@@ -153,7 +160,7 @@ export class CartService {
               timeOut: 1500,
               progressBar: true,
               progressAnimation: 'increasing',
-              positionClass: 'toast-top-right',
+              positionClass: 'toast-bottom-full-width',
             }
           );
         } //end of if

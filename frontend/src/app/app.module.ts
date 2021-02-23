@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@Angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@Angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -33,6 +36,7 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     NgxSpinnerModule,
     ToastrModule.forRoot(),
+    NoopAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
