@@ -259,12 +259,12 @@ export class CartService {
 
   CheckoutFromCart(userId: number) {
     this.http
-      .post(`${this.serverUrl}/orders/payment`, null)
+      .post(`${this.serverUrl}orders/payment`, null)
       .subscribe((res: { success: boolean }) => {
         if (res.success) {
           this.resetServaerData();
           this.http
-            .post(`${this.serverUrl}/orders/new`, {
+            .post(`${this.serverUrl}orders/new`, {
               userId: userId,
               products: this.cartDataClient.prodData,
             })
